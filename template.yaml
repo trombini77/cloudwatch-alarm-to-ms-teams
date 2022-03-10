@@ -10,10 +10,10 @@ Metadata:
     Description: Send CloudWatch Alarms to Microsoft Teams via an SNS topic.
     Author: idealo Internet GmbH
     Labels: [ 'cloudwatch','teams','notification' ]
-    HomePageUrl: https://github.com/idealo/cloudwatch-alarm-to-ms-teams
+    HomePageUrl: https://github.com/trombini77/cloudwatch-alarm-to-ms-teams
     ReadmeUrl: README.md
     SemanticVersion: 0.0.1
-    SourceCodeUrl: https://github.com/idealo/cloudwatch-alarm-to-ms-teams
+    SourceCodeUrl: https://github.com/trombini77/cloudwatch-alarm-to-ms-teams
     SpdxLicenseId: MIT
     LicenseUrl: LICENSE
 
@@ -24,6 +24,11 @@ Parameters:
   MSTeamsWebhookUrl:
     Type: String
     Description: The URL of the MS Teams webhook to which you want to send alarm notifications.
+  Architecture:
+    Type: String
+    Default: x86_64,
+    AllowedValues: [ x86_64, arm64 ]
+    Description: The architecture of the instance on which you want to run the function.
 
 Transform:
 - AWS::Serverless-2016-10-31
@@ -35,6 +40,8 @@ Resources:
       Description: Function for forwarding CloudWatch Alarms to Microsoft Teams.
       Handler: dist/handlers/forward-to-teams.handler
       Runtime: nodejs14.x
+      Architectures:
+        - !Ref Architecture
       MemorySize: 128
       Timeout: 10
       Environment:
